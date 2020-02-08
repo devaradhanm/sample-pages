@@ -19,12 +19,13 @@ jobs:
         -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
         jekyll/builder:latest /bin/bash -c "chmod 777 /srv/jekyll && bundle install && jekyll build --trace --future"
         
-    - name: Install http server
-      run: |
-        npm install -g http-server
-        npm install accessibility-insights-scan
-        npx http-server ${{ github.workspace }}/_site -p 9123 &
-        npx ai-scan --url http://127.0.0.1:9123 --output ${{ github.workspace }}/_reports
+    - name: Scan for A11y issues
+      uses: devaradhanm/hello-world-docker-action@master
+      with:
+      # Artifact name
+        site-dir: ${{ github.workspace }}/_site
+      # Directory containing files to upload
+        scan-url-relative-path: /  
         
     - name: Upload report artifact
       uses: actions/upload-artifact@v1.0.0
@@ -32,7 +33,7 @@ jobs:
       # Artifact name
         name: reports
       # Directory containing files to upload
-        path: ${{ github.workspace }}/_reports  
+        path: ${{ github.workspace }}/_accessibility-reports
         
     - name: Upload site artifact
       uses: actions/upload-artifact@v1.0.0
