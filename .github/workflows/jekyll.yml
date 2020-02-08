@@ -20,7 +20,7 @@ jobs:
         jekyll/builder:latest /bin/bash -c "chmod 777 /srv/jekyll && bundle install && jekyll build --trace --future"
         
     - name: Scan for A11y issues
-      uses: devaradhanm/hello-world-docker-action@master
+      uses: devaradhanm/hello-world-javascript-action@master
       with:
       # Artifact name
         site-dir: ${{ github.workspace }}/_site
